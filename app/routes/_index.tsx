@@ -14,8 +14,8 @@ export const meta: MetaFunction = () => {
 };
 
 export async function loader() {
-  const { instanceStateName } = await getInstanceState(instanceId);
-  return { instanceStateName };
+  const { instance, instanceStateName } = await getInstanceState(instanceId);
+  return { instanceStateName, publicDns: instance.PublicDnsName };
 }
 
 export default function Index() {
@@ -96,6 +96,7 @@ export default function Index() {
             <div className=" text-sm">
               (Server is online 4-5 mins after code is displayed)
             </div>
+            <div className=" text-sm pt-4">{loaderData.publicDns}</div>
           </div>
         </div>
       ) : (
@@ -128,7 +129,7 @@ export async function action({ request }: ActionFunctionArgs) {
             privateKey: process.env.PRIVATE_KEY,
           });
           connectRes.execCommand(
-            "cd ~/.local/share/Steam/steamapps/common/U3DS && pm2 start start.sh --name UServer"
+            'cd ~/.local/share/Steam/steamapps/common/U3DS; pm2 start start.sh --name "UServer";'
           );
           // console.log(res);
 
@@ -140,7 +141,7 @@ export async function action({ request }: ActionFunctionArgs) {
           console.log(e);
         }
       }
-    }, 20000);
+    }, 10000);
   } else if (action === "stop") {
     await stopInstance(instanceId);
   }
