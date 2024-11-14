@@ -94,7 +94,7 @@ export default function Index() {
               </button>
             </div>
             <div className=" text-sm">
-              (Server is online 1-2 mins after code is displayed)
+              (Server is online 4-5 mins after code is displayed)
             </div>
           </div>
         </div>
@@ -121,6 +121,7 @@ export async function action({ request }: ActionFunctionArgs) {
         invariant(process.env.PRIVATE_KEY, "process.env.PRIVATE_KEY undefined");
 
         try {
+          console.log("ssh connect");
           const connectRes = await ssh.connect({
             host: instance.PublicDnsName,
             username: "ubuntu",
@@ -129,13 +130,17 @@ export async function action({ request }: ActionFunctionArgs) {
           connectRes.execCommand(
             "cd ~/.local/share/Steam/steamapps/common/U3DS && nohup ./ServerHelper.sh +InternetServer/MyServer2 &"
           );
+          // console.log(res);
 
-          connectRes.dispose();
+          // connectRes.withShell()
+
+          // const shell = await connectRes.requestShell();
+          // console.log(shell);
         } catch (e) {
           console.log(e);
         }
       }
-    }, 40000);
+    }, 20000);
   } else if (action === "stop") {
     await stopInstance(instanceId);
   }
