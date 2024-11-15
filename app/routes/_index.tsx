@@ -129,7 +129,7 @@ export async function action({ request }: ActionFunctionArgs) {
             privateKey: process.env.PRIVATE_KEY,
           });
           connectRes.execCommand(
-            'cd ~/.local/share/Steam/steamapps/common/U3DS; pm2 start start.sh --name "UServer";'
+            "cd ~/.local/share/Steam/steamapps/common/U3DS && nohup ./start.sh &"
           );
           // console.log(res);
 
